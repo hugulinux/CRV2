@@ -25,5 +25,44 @@
 .faq-list summary:focus-visible{outline:3px solid #dd9b12;outline-offset:2px}
 .sidebar-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}
 .sidebar-top .search-label{margin:0}
-.version-toggle{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:25px;padding:0 8px;border:1px solid #b8c9dc;border-radius:4px;background:#eaf1fa;color:#174c83;font-size:11px;font-weight:700;letter-spacing:.02em;line-height:1}
+.version-picker{position:relative;flex:0 0 auto}
+.version-toggle{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:48px;height:27px;padding:0 7px;border:1px solid #b8c9dc;border-radius:4px;background:#eaf1fa;color:#174c83;font-size:11px;font-weight:700;letter-spacing:.02em;line-height:1}
+.version-toggle::after{content:"";width:0;height:0;border:4px solid transparent;border-top-color:#55728f;border-bottom:0;margin-top:2px}
+.version-toggle:hover{background:#dfeaf6;border-color:#91abc4}
+.version-menu{position:absolute;top:calc(100% + 6px);right:0;z-index:25;min-width:112px;padding:5px;background:#fff;border:1px solid #ccd8e4;border-radius:5px;box-shadow:0 5px 16px #18334d1c}
+.version-option{display:flex;width:100%;align-items:center;justify-content:space-between;border:0;border-radius:3px;padding:8px 9px;background:#fff;color:#25425f;text-align:left;font-size:12px}
+.version-option[aria-selected="true"]{background:#edf3fa;color:#174c83;font-weight:650}
+.version-option[aria-selected="true"]::after{content:"✓";color:#42735f;font-size:11px}
+.version-option:hover{background:#e7eef6}
+.serpro-footer{background:#062448;color:#fff;padding:52px 28px 28px;margin-left:var(--sidebar)}
+.serpro-footer-inner{position:relative;max-width:1360px;margin:0 auto;display:grid;grid-template-columns:minmax(390px,2.35fr) minmax(140px,1fr) minmax(150px,1fr) minmax(230px,1.55fr);gap:30px;align-items:center}
+.serpro-brand{display:flex;align-items:center;justify-content:flex-start;gap:50px;white-space:nowrap}
+.serpro-logo{display:block;width:min(100%,300px);height:auto;object-fit:contain}
+.br-flag{display:block;width:106px;height:auto;flex:0 0 auto;object-fit:contain}
+.serpro-footer section h2{font-size:16px;line-height:1.2;color:#fff;text-transform:uppercase;margin:0 0 13px;letter-spacing:.01em}
+.footer-link{display:block;border:0;padding:0;background:none;color:#e0e8f3;font-size:14px;line-height:1.5;text-align:left;cursor:pointer}
+.footer-link:hover{text-decoration:underline;color:#fff}
+@media(max-width:1050px){.serpro-footer{padding:42px 28px 30px}.serpro-footer-inner{grid-template-columns:1fr 1fr;gap:28px 34px;padding-top:0}.serpro-brand{grid-column:1/3;grid-row:auto;flex-direction:column;justify-self:center;gap:20px;margin-bottom:4px}.serpro-logo{width:min(54vw,260px)}.br-flag{width:82px}.serpro-footer section h2{font-size:15px}.privacy{grid-column:1/3}}
+@media(max-width:600px){.serpro-footer{padding:38px 22px 28px}.serpro-footer-inner{gap:24px 18px}.serpro-logo{width:min(62vw,230px)}.br-flag{width:72px}.serpro-footer section h2{font-size:14px}}
+@media(max-width:760px){.serpro-footer{margin-left:0}}
+.page-shell{display:grid;grid-template-columns:var(--sidebar) minmax(0,1fr);align-items:stretch;margin-top:var(--header);min-width:0}
+.openapi-download{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:45px;min-height:51px;padding:3px 2px;border:1px solid #d5e0eb;border-radius:6px;background:#fff;color:#49647f;text-decoration:none;font-size:10px;font-weight:700;line-height:1.2;letter-spacing:.04em}
+.openapi-download-top{width:59px;min-height:54px;flex:0 0 auto}
+.sandbox-button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 13px;border:1px solid #c9d5e1;border-radius:6px;background:#fff;color:#28557f;text-decoration:none;font-size:12px;font-weight:650;line-height:1.2;white-space:nowrap;flex:0 0 auto}
+.sandbox-button:hover{background:#f0f5fa;border-color:#a9bed3;color:#174c83;text-decoration:none}
+.sandbox-button:focus-visible{outline:3px solid #dd9b12;outline-offset:3px}
+.openapi-download:hover{background:#f4f8fc;border-color:#a9bed3;color:#174c83;text-decoration:none}
+.openapi-download:focus-visible{outline:3px solid #dd9b12;outline-offset:3px}
+.download-icon{display:grid;place-items:center;width:29px;height:29px;border-radius:50%;background:#eaf1fa;color:#1258bb;transition:background-color .15s ease}
+.openapi-download:hover .download-icon{background:#dce9f7}
+.download-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.page-shell>.sidebar{position:sticky;top:var(--header);bottom:auto;align-self:start;height:calc(100vh - var(--header));max-height:calc(100vh - var(--header));transform:none;overflow-y:auto;overscroll-behavior:contain}
+.page-shell>.workspace{margin:0;min-width:0;min-height:calc(100vh - var(--header))}
+.serpro-footer{width:100%;margin:0}
+@media(max-width:760px){.page-shell{display:block;margin-top:var(--header)}.page-shell>.sidebar{position:fixed;top:var(--header);bottom:0;left:0;width:280px;height:auto;max-height:none;transform:translateX(-100%);z-index:20}.page-shell>.sidebar.open{transform:translateX(0)}.page-shell>.workspace{margin:0;min-height:0}.serpro-footer{margin:0}}
+@media(max-width:760px){.topbar{gap:8px;padding-inline:12px}.brand{min-width:0;gap:7px}.brand-mark{width:32px;height:34px}.edition{font-size:9px;padding:3px 5px}.openapi-download-top{width:55px;min-height:47px}.openapi-download-top .download-icon{width:26px;height:26px}.sandbox-button{min-height:38px;padding-inline:10px;font-size:11px}}
+@media(max-width:430px){.topbar{gap:6px;padding-inline:9px}.brand{font-size:14px;gap:5px}.brand small{display:none}.brand-mark{width:29px;height:31px}.edition{font-size:8px;padding:3px 4px}.openapi-download-top{width:51px;min-height:44px;font-size:9px}.openapi-download-top .download-icon{width:24px;height:24px}.openapi-download-top svg{width:14px;height:14px}.sandbox-button{min-height:36px;padding-inline:8px;font-size:10px}}
+@media(max-width:520px){.edition{display:none}}
+.nav-group>a[data-nav="duvidas"]:not([aria-current="page"]){color:#1d547f;background:#edf4fa;border-left:2px solid #b7cadc;padding-left:8px;font-weight:650}
+@media print{.page-shell{display:block;margin:0}.page-shell>.sidebar{display:none}.page-shell>.workspace{display:block;min-height:0}}
 :root{--ink:#182a3d;--muted:#526477;--blue:#1258bb;--navy:#102c48;--mint:#007e72;--paper:#fff;--bg:#f6f8fb;--line:#dfe6ee;--sidebar:260px;--header:78px}

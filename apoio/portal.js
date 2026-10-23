@@ -7,11 +7,17 @@ const navigation=document.getElementById('navigation');
 const sidebar=document.getElementById('sidebar');
 const menu=document.getElementById('menu');
 const scrim=document.getElementById('scrim');
+const versionToggle=document.getElementById('version-toggle');
+const versionMenu=document.getElementById('version-menu');
 let currentId='inicio';
 let topicObserver;
 const normalize=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const index=pages.map(p=>({id:p.id,title:p.querySelector('h1').textContent,text:p.textContent.replace(/\s+/g,' ').trim()}));
 function closeMenu(){sidebar.classList.remove('open');menu.setAttribute('aria-expanded','false');scrim.hidden=true;}
+function closeVersionMenu(returnFocus=false){versionMenu.hidden=true;versionToggle.setAttribute('aria-expanded','false');if(returnFocus)versionToggle.focus();}
+versionToggle.addEventListener('click',()=>{const opening=versionMenu.hidden;versionMenu.hidden=!opening;versionToggle.setAttribute('aria-expanded',String(opening));if(opening)versionMenu.querySelector('[role="option"][aria-selected="true"]')?.focus();});
+versionMenu.addEventListener('click',e=>{const option=e.target.closest('[data-version]');if(!option)return;versionToggle.textContent=option.textContent.trim();versionToggle.setAttribute('aria-label',`Versão atual: ${option.textContent.trim()}. Abrir seletor de versões`);versionMenu.querySelectorAll('[role="option"]').forEach(item=>item.setAttribute('aria-selected',String(item===option)));closeVersionMenu(true);});
+document.addEventListener('click',e=>{if(!e.target.closest('.version-picker'))closeVersionMenu();});
 function route(){
   let raw;try{raw=decodeURIComponent(location.hash.slice(1));}catch{raw='inicio';}
   let [id,heading]=raw.split('~');
@@ -48,7 +54,7 @@ function route(){
 window.addEventListener('hashchange',route);route();
 menu.addEventListener('click',()=>{const open=!sidebar.classList.contains('open');sidebar.classList.toggle('open',open);menu.setAttribute('aria-expanded',String(open));scrim.hidden=!open;});
 scrim.addEventListener('click',closeMenu);
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMenu();search.value='';updateSearch();}if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){e.preventDefault();if(window.innerWidth<=760){sidebar.classList.add('open');menu.setAttribute('aria-expanded','true');scrim.hidden=false;}search.focus();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMenu();closeVersionMenu(true);search.value='';updateSearch();}if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){e.preventDefault();if(window.innerWidth<=760){sidebar.classList.add('open');menu.setAttribute('aria-expanded','true');scrim.hidden=false;}search.focus();}});
 function updateSearch(){
   const term=normalize(search.value.trim());results.replaceChildren();navigation.hidden=!!term;results.hidden=!term;
   if(!term)return;
@@ -70,7 +76,6 @@ let stored={};try{stored=JSON.parse(localStorage.getItem('consulta-renda-checkli
 checkboxes.forEach(c=>{c.checked=stored[c.dataset.key]===true;c.addEventListener('change',()=>{stored[c.dataset.key]=c.checked;try{localStorage.setItem('consulta-renda-checklist-v1',JSON.stringify(stored));}catch{}updateProgress();});});
 function updateProgress(){document.getElementById('check-progress').textContent=checkboxes.filter(c=>c.checked).length+' de '+checkboxes.length+' itens concluídos.';}
 updateProgress();
-document.getElementById('print').addEventListener('click',()=>window.print());
 const diagnoses={
   '401':['Identifique qual token e qual camada falharam.','No gateway, confira a validade do bearer token e renove se necessário. Na consulta de negócio, confira serviço, versão e destinatário da autorização. Renovar o bearer token não corrige um compartilhamento incompatível.'],
   '403':['Confira o vínculo e o acesso da instituição.','Verifique contrato, identificações e cadastro das chaves. A documentação contém orientações sobre acolhimento; se a situação persistir, encaminhe o contexto ao suporte.'],

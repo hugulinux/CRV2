@@ -1,0 +1,218 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Consulta Renda — especificação de proposta",
+    "version": "0.1.0-proposta",
+    "description": "ESPECIFICAÇÃO FICTÍCIA PARA DISCUSSÃO. Este arquivo foi montado a partir da proposta editorial do projeto e não é o contrato oficial da API Consulta Renda. Rotas e estruturas podem diferir da produção. Não use este arquivo para gerar uma integração produtiva nem execute chamadas sem validação técnica. Consulte a referência oficial: https://apicenter.estaleiro.serpro.gov.br/documentacao/api-renda/pt/chamadas/api_reference/."
+  },
+  "servers": [
+    {
+      "url": "https://gateway.apiserpro.serpro.gov.br/renda-pf-trial/v1",
+      "description": "Demonstração — endereço citado na proposta. Não execute chamadas com este arquivo fictício."
+    },
+    {
+      "url": "https://gateway.apiserpro.serpro.gov.br/renda-pf/v1",
+      "description": "Produção — endereço citado na proposta. A especificação não está homologada para chamadas."
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/Consultar/{token}": {
+      "get": {
+        "tags": [
+          "Consultar"
+        ],
+        "summary": "Consultar dados de renda autorizados",
+        "description": "Operação incluída conforme a rota descrita na proposta. O token no caminho identifica o compartilhamento feito pelo titular; o bearer token autentica a aplicação. Confirme o contrato oficial antes de integrar.",
+        "operationId": "consultarRendaProposta",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "description": "Identificador do compartilhamento autorizado pelo titular. Valor ilustrativo; formato não especificado nesta proposta.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resposta ilustrativa baseada no exemplo didático da proposta; confirme propriedades, tipos e criptografia no contrato homologado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsultaProposta"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Demais respostas. Códigos e corpos variam por operação e precisam ser confirmados na documentação oficial."
+          }
+        }
+      }
+    },
+    "/Autorizacoes/{niContratante}/{niTitularDados}": {
+      "get": {
+        "tags": [
+          "Autorizações"
+        ],
+        "summary": "Localizar compartilhamentos do titular",
+        "description": "Rota e finalidade descritas na proposta editorial. Os esquemas detalhados de autorização ainda precisam ser homologados.",
+        "operationId": "listarAutorizacoesProposta",
+        "parameters": [
+          {
+            "name": "niContratante",
+            "in": "path",
+            "required": true,
+            "description": "Identificação da instituição contratante. A proposta descreve CNPJ, sem fechar aqui as regras de formato.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "niTitularDados",
+            "in": "path",
+            "required": true,
+            "description": "Identificação do titular dos dados. A proposta descreve CPF, sem fechar aqui as regras de formato.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resposta ilustrativa. A proposta cita uma lista de autorizações, mas os nomes e tipos completos dos campos precisam de validação.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListaAutorizacoesProposta"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Demais respostas. Códigos e corpos variam por operação e precisam ser confirmados na documentação oficial."
+          }
+        }
+      }
+    },
+    "/status": {
+      "get": {
+        "tags": [
+          "Status"
+        ],
+        "summary": "Consultar disponibilidade",
+        "description": "Rota citada na proposta. O formato do corpo de resposta não foi especificado; nenhum esquema é presumido neste arquivo.",
+        "operationId": "consultarStatusProposta",
+        "responses": {
+          "200": {
+            "description": "Disponibilidade conforme a descrição da rota na proposta. O corpo não foi modelado por falta de contrato validado."
+          },
+          "default": {
+            "description": "Demais respostas. Códigos e corpos variam por operação e precisam ser confirmados na documentação oficial."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "Bearer token"
+      }
+    },
+    "schemas": {
+      "ConsultaProposta": {
+        "type": "object",
+        "description": "Modelo didático a partir do exemplo existente na proposta. A estrutura não substitui o contrato oficial.",
+        "properties": {
+          "autorizacao": {
+            "type": "object",
+            "properties": {
+              "token": {
+                "type": "string",
+                "example": "TOKEN_FICTICIO"
+              },
+              "dataHoraRegistro": {
+                "type": "string",
+                "example": "DATA_DO_REGISTRO"
+              },
+              "titular": {
+                "type": "string",
+                "example": "IDENTIFICACAO_DO_TITULAR"
+              },
+              "destinatario": {
+                "type": "string",
+                "example": "IDENTIFICACAO_DO_DESTINATARIO"
+              },
+              "avisoLegal": {
+                "type": "string",
+                "example": "TEXTO_DO_AVISO"
+              }
+            },
+            "additionalProperties": true
+          },
+          "servico": {
+            "type": "string",
+            "example": "APIConsultaRenda"
+          },
+          "idServico": {
+            "type": "string",
+            "example": "9000"
+          },
+          "versao": {
+            "type": "string",
+            "example": "VERSAO_RETORNADA"
+          },
+          "dados": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "codigo": {
+                  "type": "string",
+                  "example": "1"
+                },
+                "texto": {
+                  "type": "string",
+                  "example": "Rendimentos Recebidos de Pessoas Jurídicas"
+                },
+                "valor": {
+                  "type": "string",
+                  "description": "Valor protegido/criptografado conforme o exemplo didático da proposta. O formato exato depende de validação técnica.",
+                  "example": "CONTEUDO_CRIPTOGRAFADO_EM_BASE64"
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "ListaAutorizacoesProposta": {
+        "type": "object",
+        "description": "Esqueleto ilustrativo. A proposta cita a propriedade autorizacoes e campos associados, mas não define aqui o esquema completo.",
+        "properties": {
+          "autorizacoes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Estrutura e propriedades ainda não homologadas.",
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "x-status-documentacao": "proposta-ficticia-nao-oficial"
+}
