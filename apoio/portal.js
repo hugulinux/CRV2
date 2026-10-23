@@ -16,7 +16,7 @@ const index=pages.map(p=>({id:p.id,title:p.querySelector('h1').textContent,text:
 function closeMenu(){sidebar.classList.remove('open');menu.setAttribute('aria-expanded','false');scrim.hidden=true;}
 function closeVersionMenu(returnFocus=false){versionMenu.hidden=true;versionToggle.setAttribute('aria-expanded','false');if(returnFocus)versionToggle.focus();}
 versionToggle.addEventListener('click',()=>{const opening=versionMenu.hidden;versionMenu.hidden=!opening;versionToggle.setAttribute('aria-expanded',String(opening));if(opening)versionMenu.querySelector('[role="option"][aria-selected="true"]')?.focus();});
-versionMenu.addEventListener('click',e=>{const option=e.target.closest('[data-version]');if(!option)return;versionToggle.textContent=option.textContent.trim();versionToggle.setAttribute('aria-label',`Versão atual: ${option.textContent.trim()}. Abrir seletor de versões`);versionMenu.querySelectorAll('[role="option"]').forEach(item=>item.setAttribute('aria-selected',String(item===option)));closeVersionMenu(true);});
+versionMenu.addEventListener('click',e=>{const option=e.target.closest('[data-version]');if(!option)return;if(option.dataset.version==='v1'){closeVersionMenu();window.location.assign(option.dataset.href);return;}versionToggle.textContent=option.textContent.trim();versionToggle.setAttribute('aria-label',`Versão atual: ${option.textContent.trim()}. Abrir seletor de versões`);versionMenu.querySelectorAll('[role="option"]').forEach(item=>item.setAttribute('aria-selected',String(item===option)));closeVersionMenu(true);});
 document.addEventListener('click',e=>{if(!e.target.closest('.version-picker'))closeVersionMenu();});
 function route(){
   let raw;try{raw=decodeURIComponent(location.hash.slice(1));}catch{raw='inicio';}
