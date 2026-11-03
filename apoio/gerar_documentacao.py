@@ -359,6 +359,134 @@ page('fontes','Para a gestão','Fontes e manutenção da documentação',
 '''<h2>Como utilizar o arquivo</h2><p>Abra o HTML em um navegador. A navegação, a busca e a simulação funcionam localmente. Os links de fontes abrem os sites originais e precisam de conexão. O botão de impressão inclui todas as páginas da proposta.</p><p>Os campos de busca e marcações do checklist servem somente à navegação. Este arquivo não recebe credenciais e não realiza consultas à API. O checklist usa armazenamento local quando disponível.</p>
 <h2>Antes de publicar</h2><p>Confirme as pendências com as áreas responsáveis, valide os exemplos e aprove o contrato técnico. Depois, publique no ambiente oficial. Registre a versão das fontes e a data da próxima revisão.</p>''', 'Proveniência')
 
+# Organização da jornada da entrega inicial; pendências ficam no material interno.
+import re
+by_id = {p['id']: p for p in PAGES}
+for ident in ('preparacao', 'conceitos', 'autenticacao', 'autorizacao', 'notificacoes', 'primeira-consulta', 'simulacao', 'descriptografia'):
+    by_id[ident]['group'] = 'Funcionamento e integração'
+by_id['conceitos']['title'] = 'Glossário da integração'
+by_id['notificacoes']['title'] = 'Integrações ativa e passiva'
+by_id['notificacoes']['lead'] = 'Conheça os caminhos para identificar uma autorização e continuar a consulta.'
+by_id['notificacoes']['body'] = ('<h2>Antes de começar</h2><p>Prepare as credenciais e a chave pública da instituição e oriente o titular a autorizar o compartilhamento. Veja <a href="#preparacao">Prepare a integração</a> e <a href="#autorizacao">Obtenha e localize a autorização</a>.</p>'
+    '<h2>Integração ativa</h2><p>A instituição pode receber um aviso de novo compartilhamento e associá-lo à autorização para seguir com a consulta. Consulte a orientação oficial antes de implementar o receptor.</p>' + link('integracao_ativa/', 'Orientação oficial de integração ativa') + link('arquivo/ConsultaRenda-IntegracaoAtiva.pdf', 'Manual de integração ativa em PDF') +
+    '<h2>Integração passiva</h2><p>A instituição identifica a autorização consultando a operação de autorizações por contratante e titular. Confira o <a href="#autorizacao">guia de localização</a> e use o token do compartilhamento para consultar os dados.</p>'
+    '<h2>Depois de identificar a autorização</h2><p>Consulte os dados conforme a <a href="#referencia">referência das operações</a> e siga o <a href="#descriptografia">guia de leitura dos valores</a>.</p>')
+by_id['preparacao']['body'] = by_id['preparacao']['body'].replace('O cadastro da chave pública é chamado de <strong>acolhimento</strong> na documentação. A página de criptografia o associa à consulta ou geração das credenciais. A área de gestão registra uma descrição divergente em metadados.', 'O cadastro da chave pública é chamado de <strong>acolhimento</strong>. Consulte a orientação oficial de criptografia para realizar esse preparo antes da consulta.')
+by_id['conceitos']['body'] = by_id['conceitos']['body'].replace('Proteger os valores destinados à instituição.', 'Criptografar as informações compartilhadas para a instituição.').replace('Descriptografar os valores recebidos.', 'Descriptografar as informações recebidas com a chave privada correspondente.')
+by_id['duvidas']['body'] = by_id['duvidas']['body'].replace('<h2>Integração e operação</h2><div class="faq-list">', '<h2>Integração e operação</h2><div class="faq-list"><details><summary>Qual a diferença entre tokens e certificado?</summary><p>O bearer token autentica a aplicação; o token de compartilhamento identifica a autorização do titular. A chave pública protege as informações compartilhadas, e a chave privada correspondente permite que a instituição as leia. Consulte o <a href="#conceitos">glossário da integração</a>.</p></details>')
+by_id['autorizacao']['body'] = by_id['autorizacao']['body'].replace('<h2>Como sua aplicação localiza o compartilhamento</h2>', '<h2>Como a instituição identifica a autorização</h2><p>Na integração ativa, a instituição pode receber um aviso; na passiva, consulta as autorizações. Veja <a href="#notificacoes">integrações ativa e passiva</a>.</p><h2>Como sua aplicação localiza o compartilhamento</h2>')
+by_id['dados']['group'] = 'Metadados'
+by_id['dados']['title'] = 'Metadados da versão 1.0'
+by_id['dados']['lead'] = 'Consulte os campos da versão 1.0 documentada na referência pública.'
+by_id['dados']['body'] = '<p>Esta página explica a estrutura de uma resposta ilustrativa e apresenta o conjunto de metadados V1. Para a comparação entre as versões e os novos grupos previstos, consulte <a href="#dados-v2">metadados previstos para V2</a>; para diferenciar os controles de versão, veja <a href="#versoes">versões e mudanças</a>.</p>' + by_id['dados']['body']
+
+by_id['dados']['body'] = by_id['dados']['body'].replace('<h2>Campos do conjunto documentado</h2>', '<h2>Campos do conjunto de metadados V1</h2>')
+by_id['versoes']['group'] = 'Metadados'
+by_id['versoes']['body'] = by_id['versoes']['body'].replace('<h2>Situação da V2 nesta proposta</h2><p>O manual gerencial local menciona uma evolução planejada. A referência pública consultada nesta revisão apresenta a API v1. O modelo mantém a V2 como pauta de gestão, dependente de contrato técnico e cronograma confirmados.</p>', '<h2>Atualização V2 do produto</h2><p>Esta documentação acompanha a atualização V2 do Consulta Renda. O funcionamento geral permanece, com alterações no payload e na saída. A versão do produto, a rota da API e a versão dos metadados são identificações distintas.</p>')
+by_id['versoes']['body'] = re.sub(r'<h2>Histórico desta proposta editorial</h2>.*?(?=<div class="sources">)', '', by_id['versoes']['body'], flags=re.S)
+# Lista transcrita do documento "Consulta Renda - Lista de campos na V1 e V2", revisão de 20/10/2026.
+METADADOS_V2_PREVISTOS = [('Informações gerais',
+  [('Ano de exercício', 'Não', 'Sim', 'Novo na V2'),
+   ('Ano-calendário', 'Sim', 'Sim', 'Mantido'),
+   ('Data/Hora da entrega', 'Não', 'Sim', 'Novo na V2'),
+   ('Tipo da declaração', 'Não', 'Sim', 'Novo na V2'),
+   ('Obrigatoriedade', 'Não', 'Sim', 'Novo na V2'),
+   ('Declaração processada', 'Não', 'Sim', 'Novo na V2'),
+   ('CEP', 'Não', 'Sim', 'Novo na V2')]),
+ ('Ocupação',
+  [('Código da natureza da ocupação', 'Sim', 'Sim', 'Mantido'),
+   ('Descrição do código da natureza da ocupação', 'Sim', 'Sim', 'Mantido'),
+   ('Código da ocupação principal', 'Sim', 'Sim', 'Mantido'),
+   ('Descrição do código da ocupação principal', 'Sim', 'Sim', 'Mantido')]),
+ ('Rendimentos',
+  [('Total de renda tributável',
+    'Sim',
+    'Sim',
+    'Mantido com ajuste de nomenclatura. Na V1: "Rendimentos Tributáveis"'),
+   ('Total de rendimentos tributáveis recebidos de pessoa jurídica',
+    'Sim',
+    'Sim',
+    'Mantido com ajuste de nomenclatura. Na V1: "Rendimentos Recebidos de Pessoas Jurídicas"')]),
+ ('Rendimentos – Pessoa Jurídica',
+  [('CNPJ / CPF', 'Não', 'Sim', 'Novo detalhamento na V2'),
+   ('Rendimento recebido', 'Não', 'Sim', 'Novo detalhamento na V2'),
+   ('Contribuição previdenciária', 'Não', 'Sim', 'Novo detalhamento na V2'),
+   ('Imposto retido na fonte', 'Não', 'Sim', 'Novo detalhamento na V2'),
+   ('Décimo terceiro salário', 'Não', 'Sim', 'Novo detalhamento na V2'),
+   ('Imposto retido sobre o 13º salário', 'Não', 'Sim', 'Novo detalhamento na V2')]),
+ ('Rendimentos – Aluguéis',
+  [('Aluguéis recebidos e outros rendimentos',
+    'Sim',
+    'Sim',
+    'Mantido com ampliação de escopo/nomenclatura. Na V1: "Rendimentos Recebidos de Pessoas Físicas – '
+    'Aluguéis"')]),
+ ('Rendimentos – Pessoa Física e Exterior',
+  [('Código', 'Não', 'Sim', 'Novo detalhamento na V2'),
+   ('Nome', 'Não', 'Sim', 'Novo detalhamento na V2'),
+   ('Meses', 'Não', 'Sim', 'Novo detalhamento na V2'),
+   ('Valor', 'Não', 'Sim', 'Novo detalhamento na V2'),
+   ('Valor total', 'Não', 'Sim', 'Novo detalhamento na V2')]),
+ ('Deduções – Livro-caixa', [('Mês', 'Não', 'Sim', 'Novo na V2'), ('Valor', 'Não', 'Sim', 'Novo na V2')]),
+ ('Tributação exclusiva/definitiva',
+  [('Código', 'Não', 'Sim', 'Novo na V2'), ('Valor', 'Não', 'Sim', 'Novo na V2')]),
+ ('Rendimentos isentos e não tributáveis',
+  [('Total de rendimentos isentos e não tributáveis',
+    'Sim',
+    'Não',
+    'Na V1 existe como informação consolidada; na V2, conforme a relação fornecida, passa a ser apresentada '
+    'por código e valor'),
+   ('Código', 'Não', 'Sim', 'Novo detalhamento na V2'),
+   ('Valor', 'Não', 'Sim', 'Novo detalhamento na V2')]),
+ ('Atividade rural',
+  [('Receita de atividade rural',
+    'Sim',
+    'Não',
+    'Na V1 existe como informação consolidada; na V2, conforme a relação fornecida, passa a ser detalhada'),
+   ('Receita bruta total', 'Não', 'Sim', 'Novo detalhamento na V2'),
+   ('Despesa de custeio e investimento total', 'Não', 'Sim', 'Novo detalhamento na V2'),
+   ('Resultado tributável', 'Não', 'Sim', 'Novo detalhamento na V2'),
+   ('Limite de 20% sobre a receita bruta total', 'Não', 'Sim', 'Novo detalhamento na V2')]),
+ ('Patrimônio',
+  [('Total de patrimônio', 'Sim', 'Sim', 'Mantido com ajuste de nomenclatura. Na V1: "Patrimônio Total"')]),
+ ('Bens imóveis',
+  [('Código do bem', 'Não', 'Sim', 'Novo na V2'),
+   ('Descrição do bem', 'Não', 'Sim', 'Novo na V2'),
+   ('País', 'Não', 'Sim', 'Novo na V2'),
+   ('UF', 'Não', 'Sim', 'Novo na V2'),
+   ('Município', 'Não', 'Sim', 'Novo na V2'),
+   ('Logradouro', 'Não', 'Sim', 'Novo na V2'),
+   ('Número', 'Não', 'Sim', 'Novo na V2'),
+   ('Complemento', 'Não', 'Sim', 'Novo na V2'),
+   ('Bairro', 'Não', 'Sim', 'Novo na V2'),
+   ('CEP do imóvel', 'Não', 'Sim', 'Novo na V2'),
+   ('Data de aquisição', 'Não', 'Sim', 'Novo na V2'),
+   ('Inscrição municipal (IPTU)', 'Não', 'Sim', 'Novo na V2'),
+   ('Área do imóvel', 'Não', 'Sim', 'Novo na V2'),
+   ('Indicação de registro em cartório de registro de imóveis', 'Não', 'Sim', 'Novo na V2'),
+   ('Número da matrícula do imóvel', 'Não', 'Sim', 'Novo na V2'),
+   ('Nome do cartório de registro de imóveis', 'Não', 'Sim', 'Novo na V2'),
+   ('Campo de discriminação do bem', 'Não', 'Sim', 'Novo na V2'),
+   ('Situação patrimonial anterior', 'Não', 'Sim', 'Novo na V2'),
+   ('Situação patrimonial atual', 'Não', 'Sim', 'Novo na V2')])]
+comparacao_v2 = ''.join(
+    '<h2>' + escape(grupo) + '</h2>' + table(['Campo', 'V1', 'V2 prevista', 'Observação'],
+        [tuple(escape(campo) for campo in linha) for linha in linhas])
+    for grupo, linhas in METADADOS_V2_PREVISTOS
+)
+page('dados-v2','Metadados','Metadados previstos para a versão 2.0',
+     'Campos previstos e comparação com o conjunto de metadados V1.',
+     '<p>A V2 prevê maior detalhamento de rendimentos, informações fiscais e bens imóveis. A lista abaixo apresenta os campos por grupo e compara sua presença na V1 e na V2 prevista. Os nomes e observações seguem o documento de referência, cuja revisão é de 20/10/2026; os detalhes ainda dependem de validação técnica.</p>'
+     '<p>Na tabela, “Sim” indica presença na versão indicada e “Não” indica que o campo não consta naquela versão na relação fornecida. As linhas V1 consolidadas são mantidas para explicar o detalhamento previsto na V2; elas não indicam que a informação deixou de existir.</p>'
+     '<p>Consulte também <a href="#dados">dados retornados e metadados V1</a> e <a href="#versoes">versões e mudanças</a>.</p>' + comparacao_v2, 'Referência técnica')
+by_id = {p['id']: p for p in PAGES}
+order = ['inicio','produto','preparacao','conceitos','autenticacao','autorizacao','notificacoes','primeira-consulta','simulacao','descriptografia','versoes','dados','dados-v2','ambientes','referencia','erros','suporte','duvidas']
+PAGES = [by_id[i] for i in order]
+by_id['duvidas']['group'] = 'Dúvidas frequentes'
+for p in PAGES:
+    p['body'] = re.sub(r'<aside class="callout [^"]*">(?:(?!</aside>).)*?#gestao(?:(?!</aside>).)*?</aside>', '', p['body'], flags=re.S)
+    p['body'] = re.sub(r'<a href="#gestao">[^<]*</a>', 'a equipe de suporte', p['body'])
+    p['body'] = p['body'].replace('veja a equipe de suporte antes de implementar essa regra', 'consulte a equipe de suporte antes de implementar essa regra').replace('Quando as fontes públicas divergem, a resposta aponta a pendência em vez de escolher uma versão sem validação.', 'Consulte a equipe de suporte quando precisar esclarecer uma informação.')
+
 css = (ROOT / 'apoio' / 'portal.css').read_text(encoding='utf-8')
 js = (ROOT / 'apoio' / 'portal.js').read_text(encoding='utf-8')
 logo = base64.b64encode((ROOT / 'apoio' / 'logo-consulta-renda.png').read_bytes()).decode('ascii')

@@ -6,7 +6,7 @@ Proposta local de documentação, com revisão editorial em 22/10/2026. Não é 
 
 A arquitetura combina Diátaxis, descrição técnica OpenAPI e princípios de redação do Google. Stripe é uma referência de organização por jornada, não um padrão normativo.
 
-A proposta descreve o produto com base nas páginas públicas da Consulta Renda e na referência Swagger renderizada. Divergências e validações pendentes estão na seção “Para a gestão”. O manual local serviu de contexto; planos de V2 não foram tratados como funcionalidades já disponíveis.
+A proposta descreve o produto com base nas páginas públicas da Consulta Renda e na referência Swagger renderizada. A documentação acompanha a atualização V2 do produto, com mudanças informadas no payload e na saída. As decisões e validações pendentes estão em `STATUS_AJUSTES_DOCUMENTACAO.md`.
 
 A simulação é didática, com dados inventados. Nenhum botão executa chamadas à API. Os exemplos de integração devem ser homologados com a equipe técnica antes da publicação oficial.
 
@@ -32,4 +32,4 @@ Em `apoio/modelos-agentes/` estão modelos reutilizáveis para copiar à raiz do
 - `CLAUDE.md`: importa `AGENTS.md` e acrescenta orientações de início para Claude Code.
 - `PROMPT_integracao_consulta_renda.md`: tarefa inicial com campos para adaptar ao repositório e ao escopo.
 
-Os modelos não são instruções para este projeto de documentação, nem instalam credenciais, ferramentas ou cliente HTTP. Leia a página “Configurar Codex e Claude Code” no HTML antes de copiá-los para outra aplicação.
+Os modelos não são instruções para este projeto de documentação, nem instalam credenciais, ferramentas ou cliente HTTP. A página sobre agentes foi retirada da jornada inicial e permanece na fonte para avaliação posterior.

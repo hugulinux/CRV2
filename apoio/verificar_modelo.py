@@ -42,7 +42,7 @@ p = Structure()
 p.feed((ROOT / 'Consulta_Renda_Documentacao_Proposta.html').read_text(encoding='utf-8'))
 assert len(p.ids) == len(set(p.ids)), 'IDs duplicados'
 assert set(p.links) <= set(p.ids), f'Links quebrados: {set(p.links)-set(p.ids)}'
-assert len(p.pages) == 21, len(p.pages)
+assert len(p.pages) == 18, len(p.pages)
 assert not p.external_assets, 'Dependências externas no HTML'
 assert p.code_count >= 10
 assert 'alt="Logo Consulta Renda"' in (ROOT / 'Consulta_Renda_Documentacao_Proposta.html').read_text(encoding='utf-8')

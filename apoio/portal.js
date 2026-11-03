@@ -28,16 +28,16 @@ function route(){
   document.title=active.querySelector('h1').textContent+' · Consulta Renda';
   const toc=document.getElementById('toc');toc.replaceChildren();
   const headings=[...active.querySelectorAll('h2')];
-  headings.forEach((h,i)=>{h.id=id+'-h'+i;const a=document.createElement('a');a.href='#'+id+'~'+i;a.dataset.tocTopic=String(i);a.textContent=h.textContent;toc.append(a);});
+  headings.forEach((h,i)=>{if(!h.id)h.id=id+'-h'+i;const a=document.createElement('a');a.href='#'+id+'~'+i;a.dataset.tocTopic=String(i);a.textContent=h.textContent;toc.append(a);});
   if(topicObserver)topicObserver.disconnect();
   const tocLinks=[...toc.querySelectorAll('[data-toc-topic]')];
   const markTopic=i=>tocLinks.forEach(a=>{if(Number(a.dataset.tocTopic)===i)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});
   topicObserver=new IntersectionObserver(entries=>{
     const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
-    if(visible.length)markTopic(Number(visible[0].target.id.slice(id.length+2)));
+    if(visible.length)markTopic(headings.indexOf(visible[0].target));
     else {
       const passed=headings.filter(h=>h.getBoundingClientRect().top<125);
-      if(passed.length)markTopic(Number(passed[passed.length-1].id.slice(id.length+2)));
+      if(passed.length)markTopic(headings.indexOf(passed[passed.length-1]));
     }
   },{rootMargin:'-125px 0px -65% 0px',threshold:0});
   headings.forEach(h=>topicObserver.observe(h));
