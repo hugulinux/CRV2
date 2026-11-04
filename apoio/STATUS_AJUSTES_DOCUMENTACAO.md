@@ -6,7 +6,7 @@ Verificações comuns: gerador executado; `verificar_modelo.py` conferiu 18 pág
 
 | ID | Situação | Alteração e arquivos | Verificação | Dependência restante |
 |---|---|---|---|---|
-| M01 | Parcial | Visão geral e produto permanecem na abertura (`gerar_documentacao.py`, HTML). | Ordem do menu e links internos. | Hugo/Vitor: seis títulos e ordem da Loja; plano de negócio. A sequência não foi inventada. |
+| M01 | Parcial | A página do produto apresenta os seis passos e links para os guias, conforme imagem da Loja fornecida por Hugo (`gerar_documentacao.py`, HTML). | Geração e links internos. | Conferir a versão vigente da Loja e alinhar detalhes ao plano de negócio e à validação técnica; acesso automatizado à página retornou 403. |
 | M02 | Concluído | Grupo Funcionamento e integração combina conteúdos existentes (`gerar_documentacao.py`, HTML). | Menu em desktop e celular. | Nome final pode ser refinado editorialmente. |
 | M03 | Concluído | Preparação, primeira consulta e simulação movidas para integração (`gerar_documentacao.py`, HTML). | Menu e simulação nos dois tamanhos; checklist preservado na estrutura. | Payloads continuam ilustrativos, sujeitos a M14. |
 | M04 | Concluído | FAQ colocado como último grupo e última página (`gerar_documentacao.py`, HTML). | Ordem, links e abertura de pergunta nos dois tamanhos. | — |

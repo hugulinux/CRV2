@@ -487,6 +487,18 @@ for p in PAGES:
     p['body'] = re.sub(r'<a href="#gestao">[^<]*</a>', 'a equipe de suporte', p['body'])
     p['body'] = p['body'].replace('veja a equipe de suporte antes de implementar essa regra', 'consulte a equipe de suporte antes de implementar essa regra').replace('Quando as fontes públicas divergem, a resposta aponta a pendência em vez de escolher uma versão sem validação.', 'Consulte a equipe de suporte quando precisar esclarecer uma informação.')
 
+jornada_loja = '''<h2>Como funciona: passo a passo</h2>
+<p>Conheça o caminho da contratação até a leitura das informações. Os links levam aos detalhes de cada etapa.</p>
+<div class="card-grid three jornada-loja">
+<div class="card"><span class="card-number">01</span><h3>Contratação do Serviço</h3><p>A instituição contrata o Consulta Renda, recebe as credenciais e prepara a integração com seus sistemas.</p><a href="#preparacao">Preparar a integração →</a></div>
+<div class="card"><span class="card-number">02</span><h3>Autorização do Titular</h3><p>O titular acessa o Compartilha Receita, escolhe a instituição e autoriza o compartilhamento, definindo as condições disponíveis no serviço.</p><a href="#autorizacao">Entender a autorização →</a></div>
+<div class="card"><span class="card-number">03</span><h3>Geração de Token de Autorização</h3><p>A autorização gera um token de compartilhamento. A instituição pode recebê-lo pela integração ativa ou localizá-lo pela integração passiva.</p><a href="#notificacoes">Conhecer as modalidades →</a></div>
+<div class="card"><span class="card-number">04</span><h3>Consulta a API</h3><p>A aplicação usa as credenciais para obter o bearer token e consulta a API com o token de compartilhamento.</p><a href="#primeira-consulta">Fazer a primeira consulta →</a></div>
+<div class="card"><span class="card-number">05</span><h3>Consulta às bases oficiais</h3><p>A API consulta informações de renda presentes na declaração de Imposto de Renda da pessoa física transmitida à Receita Federal.</p><a href="#dados">Entender os dados retornados →</a></div>
+<div class="card"><span class="card-number">06</span><h3>Retorno Seguro das Informações</h3><p>As informações são criptografadas com a chave pública da instituição; a chave privada correspondente permite sua leitura pela instituição destinatária.</p><a href="#descriptografia">Entender a descriptografia →</a></div>
+</div><p class="muted">Estrutura baseada no passo a passo apresentado na Loja Serpro.</p>'''
+by_id['produto']['body'] = by_id['produto']['body'].replace('<h2>O que você recebe</h2>', jornada_loja + '<h2>O que você recebe</h2>', 1)
+
 css = (ROOT / 'apoio' / 'portal.css').read_text(encoding='utf-8')
 js = (ROOT / 'apoio' / 'portal.js').read_text(encoding='utf-8')
 logo = base64.b64encode((ROOT / 'apoio' / 'logo-consulta-renda.png').read_bytes()).decode('ascii')
