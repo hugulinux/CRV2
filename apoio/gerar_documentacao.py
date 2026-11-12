@@ -479,7 +479,32 @@ page('dados-v2','Metadados','Metadados previstos para a versão 2.0',
      '<p>Na tabela, “Sim” indica presença na versão indicada e “Não” indica que o campo não consta naquela versão na relação fornecida. As linhas V1 consolidadas são mantidas para explicar o detalhamento previsto na V2; elas não indicam que a informação deixou de existir.</p>'
      '<p>Consulte também <a href="#dados">dados retornados e metadados V1</a> e <a href="#versoes">versões e mudanças</a>.</p>' + comparacao_v2, 'Referência técnica')
 by_id = {p['id']: p for p in PAGES}
-order = ['inicio','produto','preparacao','conceitos','autenticacao','autorizacao','notificacoes','primeira-consulta','simulacao','descriptografia','versoes','dados','dados-v2','ambientes','referencia','erros','suporte','duvidas']
+# Organização da navegação conforme a proposta, mantendo os itens existentes.
+for ident in ('preparacao', 'conceitos', 'autenticacao', 'primeira-consulta', 'referencia'):
+    by_id[ident]['group'] = 'Primeiros passos para integração'
+for ident in ('autorizacao', 'notificacoes'):
+    by_id[ident]['group'] = 'Autorizações de compartilhamento'
+for ident in ('versoes', 'dados', 'dados-v2'):
+    by_id[ident]['group'] = 'Estrutura de dados'
+by_id['descriptografia']['group'] = 'Criptografia do payload'
+by_id['descriptografia']['title'] = 'Criptografia e descriptografia'
+by_id['descriptografia']['lead'] = 'Como proteger e ler os valores retornados na documentação V1.'
+by_id['descriptografia']['body'] = ("""<h2>Como os valores são protegidos</h2><p>Na documentação V1, os valores retornados são criptografados com o algoritmo assimétrico RSA e a chave pública do certificado digital fornecido pela instituição destinatária. Para lê-los, a instituição usa a chave privada RSA correspondente com a configuração <code>RSA/ECB/PKCS1Padding</code>.</p>
+<h2>Acolhimento da chave pública</h2><p>A documentação V1 informa que a chave pública do e-CNPJ é acolhida quando o cliente consulta ou gera a Consumer Key e a Consumer Secret na Área do Cliente. Siga a orientação de visualização de chaves da Central de Ajuda e mantenha a chave privada correspondente sob responsabilidade da instituição.</p>""" + link('https://centraldeajuda.serpro.gov.br/duvidas/pt/area-do-cliente/chaves/', 'Consultar orientação sobre as chaves') + """
+<h2>Chave para demonstração</h2><p>Para ler os valores da demonstração V1, use a chave privada fornecida no arquivo de certificado de teste. O pacote contém um arquivo LEIA-ME com o PIN, a chave pública, a chave privada e o certificado de homologação. A documentação informa que esse certificado está expirado e serve apenas para obter a chave privada usada nos dados de demonstração.</p>""" + link('arquivo/eCNPJ-SERPRO-33683111000107.zip', 'Obter certificado e chaves de demonstração') + """
+<h2>Após a consulta</h2><ol><li>Identifique os valores criptografados na resposta.</li><li>Use a chave privada correspondente ao ambiente e à chave pública utilizada na criptografia.</li><li>Descriptografe os valores e interprete-os com os metadados aplicáveis.</li></ol><p>As orientações desta página reproduzem o funcionamento descrito na documentação V1. Consulte o contrato da V2 antes de aplicá-las a essa versão.</p>""" + refs(('criptografia/','Criptografia na documentação V1'),('chamadas/demonstracao/','Demonstração V1')))
+for ident in ('ambientes', 'simulacao'):
+    by_id[ident]['group'] = 'Ambiente de testes e demonstração'
+by_id['ambientes']['title'] = 'Ambientes de teste e produção'
+by_id['ambientes']['lead'] = 'Conheça a demonstração V1 e as diferenças em relação ao ambiente de produção.'
+by_id['ambientes']['body'] = ("""<h2>Ambiente de demonstração V1</h2><p>A documentação oficial oferece uma interface Swagger para experimentar a API antes da contratação. O ambiente usa uma massa de dados fixa e pré-carregada, não consulta nem retorna dados reais e não gera cobrança.</p><p>A interface apresenta um bearer token de demonstração. Os tokens de compartilhamento para os cenários de teste estão na página de uso via documentação. Os valores retornados são criptografados; para lê-los, utilize a chave privada de demonstração indicada na página de <a href="#descriptografia">criptografia e descriptografia</a>.</p>""" + link('chamadas/demonstracao/', 'Abrir demonstração oficial V1') + link('uso_via_documentacao/#dados-para-demonstracao', 'Consultar os tokens de teste') + """
+<h2>Endereços e uso</h2>""" + table(['Ambiente','Endereço-base V1','Finalidade'], [('Demonstração','<code>https://gateway.apiserpro.serpro.gov.br/renda-pf-trial/v1</code>','Testar com dados fixos e credenciais de demonstração.'),('Produção','<code>https://gateway.apiserpro.serpro.gov.br/renda-pf/v1</code>','Consultar dados autorizados com as credenciais da contratação.')]) + """
+<h2>Limitações e cobrança</h2><p>Os cenários da demonstração são fixos e não substituem a verificação das condições de produção. Na V1, a página de códigos de retorno informa que a operação Consultar é bilhetada quando retorna HTTP 200; as páginas de Autorizações e Status informam que seus retornos não são bilhetados. Consulte as condições comerciais vigentes.</p><p>Esta página descreve a demonstração V1. A disponibilidade e as características de um ambiente V2 devem ser confirmadas antes do uso.</p>""" + refs(('chamadas/demonstracao/','Demonstração V1'),('uso_via_documentacao/','Dados para demonstração'),('criptografia/','Chave para demonstração'),('codigos_retorno_consultar/','Retornos de consulta'),('codigos_retorno_autorizacoes/','Retornos de autorizações'),('codigos_retorno_status/','Retornos de status')))
+by_id['erros']['group'] = 'Códigos de retorno e solução de problemas'
+by_id['suporte']['group'] = 'Suporte e canais de atendimento'
+
+by_id = {p['id']: p for p in PAGES}
+order = ['inicio','produto','preparacao','conceitos','autenticacao','referencia','primeira-consulta','autorizacao','notificacoes','versoes','dados','dados-v2','descriptografia','ambientes','simulacao','erros','duvidas','suporte']
 PAGES = [by_id[i] for i in order]
 by_id['duvidas']['group'] = 'Dúvidas frequentes'
 for p in PAGES:
