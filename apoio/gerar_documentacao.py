@@ -479,6 +479,12 @@ page('dados-v2','Metadados','Metadados previstos para a versão 2.0',
      '<p>Na tabela, “Sim” indica presença na versão indicada e “Não” indica que o campo não consta naquela versão na relação fornecida. As linhas V1 consolidadas são mantidas para explicar o detalhamento previsto na V2; elas não indicam que a informação deixou de existir.</p>'
      '<p>Consulte também <a href="#dados">dados retornados e metadados V1</a> e <a href="#versoes">versões e mudanças</a>.</p>' + comparacao_v2, 'Referência técnica')
 by_id = {p['id']: p for p in PAGES}
+# Conteúdo revisado dos tópicos 7, 8 e 9.
+diagnostico = by_id['erros']['body'].split('<h2>Mapa de respostas de consulta</h2>', 1)[0]
+by_id['erros']['body'] = diagnostico + (ROOT / 'apoio' / 'erros_revisados.html').read_text(encoding='utf-8')
+by_id['duvidas']['body'] = (ROOT / 'apoio' / 'faq_revisado.html').read_text(encoding='utf-8')
+modelo_chamado = re.search(r'<div class="codebox">.*?</pre></div>', by_id['suporte']['body'], flags=re.S)
+by_id['suporte']['body'] = (ROOT / 'apoio' / 'suporte_revisado.html').read_text(encoding='utf-8') + ('<h2>Modelo de descrição do chamado</h2>' + modelo_chamado.group(0) if modelo_chamado else '')
 # Organização da navegação conforme a proposta, mantendo os itens existentes.
 for ident in ('preparacao', 'conceitos', 'autenticacao', 'primeira-consulta', 'referencia'):
     by_id[ident]['group'] = 'Primeiros passos para integração'
