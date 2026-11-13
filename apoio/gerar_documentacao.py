@@ -481,6 +481,8 @@ page('dados-v2','Metadados','Metadados previstos para a versão 2.0',
 by_id = {p['id']: p for p in PAGES}
 # Conteúdo revisado dos tópicos 7, 8 e 9.
 diagnostico = by_id['erros']['body'].split('<h2>Mapa de respostas de consulta</h2>', 1)[0]
+by_id['erros']['title'] = 'Códigos de retorno e solução de problemas'
+by_id['erros']['lead'] = 'Diagnostique os retornos da API e reúna as informações necessárias para resolver a ocorrência.'
 by_id['erros']['body'] = diagnostico + (ROOT / 'apoio' / 'erros_revisados.html').read_text(encoding='utf-8')
 by_id['duvidas']['body'] = (ROOT / 'apoio' / 'faq_revisado.html').read_text(encoding='utf-8')
 modelo_chamado = re.search(r'<div class="codebox">.*?</pre></div>', by_id['suporte']['body'], flags=re.S)
