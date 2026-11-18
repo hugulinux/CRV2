@@ -496,18 +496,26 @@ for ident in ('versoes', 'dados', 'dados-v2'):
     by_id[ident]['group'] = 'Estrutura de dados'
 by_id['descriptografia']['group'] = 'Criptografia do payload'
 by_id['descriptografia']['title'] = 'Criptografia e descriptografia'
-by_id['descriptografia']['lead'] = 'Como proteger e ler os valores retornados na documentação V1.'
-by_id['descriptografia']['body'] = ("""<h2>Como os valores são protegidos</h2><p>Na documentação V1, os valores retornados são criptografados com o algoritmo assimétrico RSA e a chave pública do certificado digital fornecido pela instituição destinatária. Para lê-los, a instituição usa a chave privada RSA correspondente com a configuração <code>RSA/ECB/PKCS1Padding</code>.</p>
-<h2>Acolhimento da chave pública</h2><p>A documentação V1 informa que a chave pública do e-CNPJ é acolhida quando o cliente consulta ou gera a Consumer Key e a Consumer Secret na Área do Cliente. Siga a orientação de visualização de chaves da Central de Ajuda e mantenha a chave privada correspondente sob responsabilidade da instituição.</p>""" + link('https://centraldeajuda.serpro.gov.br/duvidas/pt/area-do-cliente/chaves/', 'Consultar orientação sobre as chaves') + """
-<h2>Chave para demonstração</h2><p>Para ler os valores da demonstração V1, use a chave privada fornecida no arquivo de certificado de teste. O pacote contém um arquivo LEIA-ME com o PIN, a chave pública, a chave privada e o certificado de homologação. A documentação informa que esse certificado está expirado e serve apenas para obter a chave privada usada nos dados de demonstração.</p>""" + link('arquivo/eCNPJ-SERPRO-33683111000107.zip', 'Obter certificado e chaves de demonstração') + """
-<h2>Após a consulta</h2><ol><li>Identifique os valores criptografados na resposta.</li><li>Use a chave privada correspondente ao ambiente e à chave pública utilizada na criptografia.</li><li>Descriptografe os valores e interprete-os com os metadados aplicáveis.</li></ol><p>As orientações desta página reproduzem o funcionamento descrito na documentação V1. Consulte o contrato da V2 antes de aplicá-las a essa versão.</p>""" + refs(('criptografia/','Criptografia na documentação V1'),('chamadas/demonstracao/','Demonstração V1')))
+by_id['descriptografia']['lead'] = 'Entenda como a resposta é protegida e como recuperar as informações para processamento.'
+by_id['descriptografia']['body'] = '''<h2>5.1 Visão geral</h2>
+<p>A criptografia protege os valores compartilhados para que a organização destinatária possa lê-los com a chave privada correspondente.</p>
+<p>Consulta → resposta com valores criptografados → descriptografia com a chave privada → dados disponíveis para processamento.</p>
+<h2>5.2 Certificado digital e-CNPJ</h2>
+<p>O certificado vincula a chave pública à organização. Prepare o e-CNPJ da contratante para o acolhimento e identifique onde a aplicação acessará a chave privada correspondente.</p>
+<h2>5.3 Chave pública e acolhimento</h2>
+<p>O acolhimento é o registro da chave pública que o Serpro usa para criptografar os valores destinados à organização. No procedimento já documentado, esse registro ocorre na consulta ou geração das credenciais na Área do Cliente, com o e-CNPJ. Veja <a href="#preparacao">Habilitação e credenciais</a>.</p>
+<h2>5.4 Chave privada</h2>
+<p>A chave privada da organização fica sob sua responsabilidade. O Serpro não a administra nem a fornece. Restrinja o acesso à aplicação e às pessoas autorizadas. Nunca publique a chave nem a envie em chamados de suporte.</p>
+<h2>5.5 Criptografia da resposta</h2>
+<p>Mesmo quando Consultar retorna sucesso, os valores protegidos ainda precisam ser descriptografados. Identifique no contrato da versão quais campos são cifrados e como o conteúdo está codificado. O procedimento anterior documenta RSA com <code>RSA/ECB/PKCS1Padding</code>. Para a V2, algoritmo, configuração, codificação e campos protegidos estão <strong>pendentes de validação técnica</strong>.</p>
+<h2>5.6 Descriptografia</h2>
+<ol><li>Confira o status da consulta e identifique os valores protegidos.</li><li>Selecione a chave privada correspondente à chave pública usada para cifrar a resposta.</li><li>Converta a representação do valor conforme o contrato e aplique a configuração criptográfica da versão.</li><li>Interprete o resultado com os <a href="#dados-v2">metadados da versão</a>. Trate erros de leitura separadamente de valores ausentes.</li></ol>
+<p>Para exercitar o fluxo com dados preparados para teste, veja <a href="#ambientes">Ambiente de testes e demonstração</a>.</p>'''
 for ident in ('ambientes', 'simulacao'):
     by_id[ident]['group'] = 'Ambiente de testes e demonstração'
-by_id['ambientes']['title'] = 'Ambientes de teste e produção'
-by_id['ambientes']['lead'] = 'Conheça a demonstração V1 e as diferenças em relação ao ambiente de produção.'
-by_id['ambientes']['body'] = ("""<h2>Ambiente de demonstração V1</h2><p>A documentação oficial oferece uma interface Swagger para experimentar a API antes da contratação. O ambiente usa uma massa de dados fixa e pré-carregada, não consulta nem retorna dados reais e não gera cobrança.</p><p>A interface apresenta um bearer token de demonstração. Os tokens de compartilhamento para os cenários de teste estão na página de uso via documentação. Os valores retornados são criptografados; para lê-los, utilize a chave privada de demonstração indicada na página de <a href="#descriptografia">criptografia e descriptografia</a>.</p>""" + link('chamadas/demonstracao/', 'Abrir demonstração oficial V1') + link('uso_via_documentacao/#dados-para-demonstracao', 'Consultar os tokens de teste') + """
-<h2>Endereços e uso</h2>""" + table(['Ambiente','Endereço-base V1','Finalidade'], [('Demonstração','<code>https://gateway.apiserpro.serpro.gov.br/renda-pf-trial/v1</code>','Testar com dados fixos e credenciais de demonstração.'),('Produção','<code>https://gateway.apiserpro.serpro.gov.br/renda-pf/v1</code>','Consultar dados autorizados com as credenciais da contratação.')]) + """
-<h2>Limitações e cobrança</h2><p>Os cenários da demonstração são fixos e não substituem a verificação das condições de produção. Na V1, a página de códigos de retorno informa que a operação Consultar é bilhetada quando retorna HTTP 200; as páginas de Autorizações e Status informam que seus retornos não são bilhetados. Consulte as condições comerciais vigentes.</p><p>Esta página descreve a demonstração V1. A disponibilidade e as características de um ambiente V2 devem ser confirmadas antes do uso.</p>""" + refs(('chamadas/demonstracao/','Demonstração V1'),('uso_via_documentacao/','Dados para demonstração'),('criptografia/','Chave para demonstração'),('codigos_retorno_consultar/','Retornos de consulta'),('codigos_retorno_autorizacoes/','Retornos de autorizações'),('codigos_retorno_status/','Retornos de status')))
+by_id['ambientes']['title'] = 'Ambiente de testes e demonstração'
+by_id['ambientes']['lead'] = 'Experimente as operações da Consulta Renda com os cenários públicos do Trial V1.'
+by_id['ambientes']['body'] = (ROOT / 'apoio' / 'demonstracao_v1.html').read_text(encoding='utf-8')
 # Conteúdo dos tópicos 1 a 4 da proposta de revisão.
 by_id['produto']['body'] = by_id['produto']['body'].replace('<h2>Contratação e custos</h2>', '<h2>Como contratar</h2><p>Consulte o passo a passo de contratação na documentação oficial.</p>' + link('como_contratar/', 'Como contratar a Consulta Renda') + '<h3>Condições comerciais</h3>')
 by_id['preparacao']['body'] = by_id['preparacao']['body'].replace('</div><p id="check-progress"', ''.join(f'<label><input type="checkbox" data-key="{key}"><span><strong>{label}</strong></span></label>' for key, label in [
@@ -531,6 +539,12 @@ by_id['erros']['group'] = 'Códigos de retorno e solução de problemas'
 by_id['suporte']['group'] = 'Suporte e canais de atendimento'
 
 by_id = {p['id']: p for p in PAGES}
+# O roteiro de demonstração fica no capítulo 6. Preserve a primeira consulta em produção.
+first_query = by_id['primeira-consulta']
+before_demo, demo_start, rest = first_query['body'].partition('<h2>1. Explore a demonstração</h2>')
+_, production_start, production = rest.partition('<h2>5. Avance para uma consulta em produção</h2>')
+assert demo_start and production_start
+first_query['body'] = before_demo + '<p>Para experimentar o fluxo, siga o <a href="#ambientes">roteiro de demonstração</a>.</p><h2>Consulta em produção</h2>' + production.split('<div class="sources">', 1)[0]
 order = ['inicio','produto','preparacao','conceitos','autenticacao','referencia','primeira-consulta','autorizacao','notificacoes','versoes','dados','dados-v2','descriptografia','ambientes','simulacao','erros','duvidas','suporte']
 PAGES = [by_id[i] for i in order]
 by_id['duvidas']['group'] = 'Dúvidas frequentes'
