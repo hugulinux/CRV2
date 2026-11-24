@@ -514,7 +514,7 @@ by_id['descriptografia']['body'] = '''<h2>5.1 Visão geral</h2>
 for ident in ('ambientes', 'simulacao'):
     by_id[ident]['group'] = 'Ambiente de testes e demonstração'
 by_id['ambientes']['title'] = 'Ambiente de testes e demonstração'
-by_id['ambientes']['lead'] = 'Experimente as operações da Consulta Renda com os cenários públicos do Trial V1.'
+by_id['ambientes']['lead'] = 'Conteúdo em elaboração'
 by_id['ambientes']['body'] = (ROOT / 'apoio' / 'demonstracao_v1.html').read_text(encoding='utf-8')
 # Conteúdo dos tópicos 1 a 4 da proposta de revisão.
 by_id['produto']['body'] = by_id['produto']['body'].replace('<h2>Contratação e custos</h2>', '<h2>Como contratar</h2><p>Consulte o passo a passo de contratação na documentação oficial.</p>' + link('como_contratar/', 'Como contratar a Consulta Renda') + '<h3>Condições comerciais</h3>')
