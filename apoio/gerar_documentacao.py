@@ -497,20 +497,39 @@ for ident in ('versoes', 'dados', 'dados-v2'):
 by_id['descriptografia']['group'] = 'Criptografia do payload'
 by_id['descriptografia']['title'] = 'Criptografia e descriptografia'
 by_id['descriptografia']['lead'] = 'Entenda como a resposta é protegida e como recuperar as informações para processamento.'
-by_id['descriptografia']['body'] = '''<h2>5.1 Visão geral</h2>
-<p>A criptografia protege os valores compartilhados para que a organização destinatária possa lê-los com a chave privada correspondente.</p>
-<p>Consulta → resposta com valores criptografados → descriptografia com a chave privada → dados disponíveis para processamento.</p>
-<h2>5.2 Certificado digital e-CNPJ</h2>
-<p>O certificado vincula a chave pública à organização. Prepare o e-CNPJ da contratante para o acolhimento e identifique onde a aplicação acessará a chave privada correspondente.</p>
-<h2>5.3 Chave pública e acolhimento</h2>
-<p>O acolhimento é o registro da chave pública que o Serpro usa para criptografar os valores destinados à organização. No procedimento já documentado, esse registro ocorre na consulta ou geração das credenciais na Área do Cliente, com o e-CNPJ. Veja <a href="#preparacao">Habilitação e credenciais</a>.</p>
-<h2>5.4 Chave privada</h2>
-<p>A chave privada da organização fica sob sua responsabilidade. O Serpro não a administra nem a fornece. Restrinja o acesso à aplicação e às pessoas autorizadas. Nunca publique a chave nem a envie em chamados de suporte.</p>
-<h2>5.5 Criptografia da resposta</h2>
-<p>Mesmo quando Consultar retorna sucesso, os valores protegidos ainda precisam ser descriptografados. Identifique no contrato da versão quais campos são cifrados e como o conteúdo está codificado. O procedimento anterior documenta RSA com <code>RSA/ECB/PKCS1Padding</code>. Para a V2, algoritmo, configuração, codificação e campos protegidos estão <strong>pendentes de validação técnica</strong>.</p>
-<h2>5.6 Descriptografia</h2>
-<ol><li>Confira o status da consulta e identifique os valores protegidos.</li><li>Selecione a chave privada correspondente à chave pública usada para cifrar a resposta.</li><li>Converta a representação do valor conforme o contrato e aplique a configuração criptográfica da versão.</li><li>Interprete o resultado com os <a href="#dados-v2">metadados da versão</a>. Trate erros de leitura separadamente de valores ausentes.</li></ol>
-<p>Para exercitar o fluxo com dados preparados para teste, veja <a href="#ambientes">Ambiente de testes e demonstração</a>.</p>'''
+by_id['descriptografia']['body'] = ('''<p>A Consulta Renda utiliza criptografia para proteger as informações compartilhadas, garantindo que somente a organização destinatária autorizada, de posse da chave privada correspondente, possa acessar seu conteúdo.</p>
+<p>O Serpro criptografa os valores retornados pela API utilizando a chave pública do certificado digital e-CNPJ da organização destinatária. A organização utiliza a chave privada correspondente para realizar a descriptografia.</p>
+<h2>5.1 Certificado digital e acolhimento da chave pública</h2>
+<p>Para utilizar a Consulta Renda em produção, a organização deve possuir certificado digital e-CNPJ válido, vinculado à pessoa jurídica contratante.</p>
+<p>O acolhimento da chave pública ocorre durante o processo de consulta ou geração das credenciais Consumer Key e Consumer Secret na Área do Cliente Serpro.</p>
+<p>A chave pública acolhida é utilizada pelo Serpro para criptografar as informações destinadas à organização.</p>
+<p>A chave privada correspondente permanece sob responsabilidade da organização contratante e não é compartilhada com o Serpro.</p>
+<p>O procedimento de acolhimento está apresentado no <a href="#preparacao">item 2.4 – Habilitação e credenciais</a>.</p>
+<h2>5.2 Criptografia da resposta</h2>
+<p>As informações retornadas pela operação Consultar são disponibilizadas em formato JSON, com os valores protegidos por criptografia.</p>
+<p>A Consulta Renda utiliza a seguinte configuração criptográfica:</p>''' +
+table(['Propriedade', 'Especificação'], [
+    ('Algoritmo', 'RSA'),
+    ('Transformação criptográfica', '<code>RSA/ECB/PKCS1Padding</code>'),
+    ('Chave de criptografia', 'Chave pública RSA do certificado digital e-CNPJ da organização destinatária'),
+    ('Chave de descriptografia', 'Chave privada RSA correspondente'),
+]) + '''
+<p>A criptografia dos valores é independente da proteção HTTPS/TLS utilizada na comunicação com a API.</p>
+<p>A proteção HTTPS/TLS protege a transmissão, enquanto a criptografia RSA protege o conteúdo das informações destinadas à organização autorizada.</p>
+<h2>5.3 Como descriptografar as informações</h2>
+<p>Após receber uma resposta HTTP 200 da operação Consultar, a aplicação deve realizar a descriptografia dos valores protegidos.</p>
+<p>Siga estas etapas:</p>
+<ol>
+<li>Identifique os valores criptografados na resposta JSON.</li>
+<li>Utilize a chave privada RSA correspondente à chave pública acolhida pelo Serpro.</li>
+<li>Converta os valores criptografados para a representação binária necessária ao processamento, conforme a codificação utilizada na resposta.</li>
+<li>Execute a descriptografia utilizando a transformação <code>RSA/ECB/PKCS1Padding</code>.</li>
+<li>Interprete os valores recuperados conforme os campos e formatos apresentados no <a href="#dados-v2">Capítulo 4 – Estrutura das informações</a>.</li>
+</ol>
+<p>A chave privada deve permanecer protegida e acessível somente às aplicações e aos responsáveis autorizados pela organização.</p>
+<p>Nunca compartilhe a chave privada com o Serpro nem a inclua em requisições, registros de aplicação ou chamados de suporte.</p>
+<p>Para validar a implementação da descriptografia, utilize o <strong>ambiente de testes/mock (demonstração)</strong>, que disponibiliza informações criptografadas e uma chave privada própria para recuperar os valores retornados.</p>
+<p>As orientações para realização dos testes serão apresentadas no <a href="#ambientes">Capítulo 6 – Ambiente de testes/mock (demonstração)</a>. O conteúdo desse capítulo será elaborado pela equipe de desenvolvimento.</p>''')
 for ident in ('ambientes', 'simulacao'):
     by_id[ident]['group'] = 'Ambiente de testes e demonstração'
 by_id['ambientes']['title'] = 'Ambiente de testes e demonstração'
